@@ -5,6 +5,8 @@ import authRoutes from "./modules/auth/auth.routes";
 const app = express();
 import { authenticate, AuthRequest } from "./middleware/auth.middleware";
 
+import taskRoutes from "./modules/task/task.routes";
+
 app.use(cors({
   origin: "http://localhost:3000",
   credentials: true
@@ -25,5 +27,7 @@ app.get("/protected", authenticate, (req: AuthRequest, res) => {
     user: req.user,
   });
 });
+
+app.use("/tasks", taskRoutes);
 
 export default app;
