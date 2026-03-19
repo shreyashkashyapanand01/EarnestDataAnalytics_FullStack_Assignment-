@@ -19,28 +19,107 @@ This is a **production-ready backend API** built using **Node.js, TypeScript, Pr
 
 ---
 
-# 🏗️ Project Architecture
+# 🏗️ Project Architecture (Detailed)
 
-```
+```plaintext
 backend/
 ├── src/
 │   ├── modules/
 │   │   ├── auth/
+│   │   │   ├── auth.controller.ts      # Handles HTTP requests (register, login, etc.)
+│   │   │   ├── auth.service.ts         # Business logic (DB operations, JWT handling)
+│   │   │   ├── auth.routes.ts          # Defines auth API routes
+│   │   │   └── auth.validation.ts      # Zod schemas for request validation
+│   │   │
 │   │   ├── task/
+│   │   │   ├── task.controller.ts      # Handles task-related requests
+│   │   │   ├── task.service.ts         # Task business logic (CRUD operations)
+│   │   │   ├── task.routes.ts          # Task API routes (protected)
+│   │   │   └── task.validation.ts      # Zod validation schemas for tasks
 │   │
 │   ├── middleware/
+│   │   ├── auth.middleware.ts          # Protects routes using JWT authentication
+│   │   ├── validate.middleware.ts      # Validates request body using Zod schemas
+│   │   └── error.middleware.ts         # Global error handler (centralized error handling)
+│   │
 │   ├── utils/
+│   │   ├── asyncHandler.ts             # Wraps async functions to catch errors automatically
+│   │   ├── hash.ts                    # Password hashing and comparison (bcrypt)
+│   │   ├── jwt.ts                     # JWT generation & verification (access + refresh tokens)
+│   │   └── response.ts                # Standard API response format (success/error)
+│   │
 │   ├── prisma/
-│   ├── app.ts
-│   └── server.ts
+│   │   └── client.ts                  # Prisma client instance (DB connection)
+│   │
+│   ├── app.ts                         # Express app configuration (middlewares, routes)
+│   └── server.ts                      # Entry point (starts server, loads env variables)
 │
 ├── prisma/
-│   └── schema.prisma
+│   ├── schema.prisma                  # Database schema (User, Task models)
+│   └── migrations/                    # Auto-generated DB migration files
 │
-├── .env
-├── prisma.config.ts
-├── package.json
+├── .env                              # Environment variables (DB URL, JWT secrets)
+├── prisma.config.ts                  # Prisma v7 configuration (adapter + datasource)
+├── package.json                      # Project dependencies & scripts
 ```
+
+---
+
+# 🧠 Architecture Explanation
+
+This backend follows a **modular and layered architecture**:
+
+### 🔹 Controller Layer
+
+* Handles incoming HTTP requests
+* Sends responses back to client
+
+### 🔹 Service Layer
+
+* Contains business logic
+* Interacts with database via Prisma
+
+### 🔹 Middleware Layer
+
+* Authentication (JWT verification)
+* Validation (Zod schemas)
+* Error handling (global middleware)
+
+### 🔹 Utility Layer
+
+* Common reusable functions (JWT, hashing, responses)
+
+### 🔹 Database Layer
+
+* Prisma ORM manages PostgreSQL database
+* Schema defined in `schema.prisma`
+
+---
+
+# 🔄 Request Flow
+
+```plaintext
+Client Request
+      ↓
+Route
+      ↓
+Validation Middleware (Zod)
+      ↓
+Auth Middleware (JWT)
+      ↓
+Controller
+      ↓
+Service Layer
+      ↓
+Prisma ORM
+      ↓
+Database
+      ↓
+Response → Client
+```
+
+---
+
 
 ---
 
