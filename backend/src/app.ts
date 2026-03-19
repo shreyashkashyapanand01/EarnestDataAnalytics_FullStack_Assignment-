@@ -7,6 +7,8 @@ import { authenticate, AuthRequest } from "./middleware/auth.middleware";
 
 import taskRoutes from "./modules/task/task.routes";
 
+import { globalErrorHandler } from "./middleware/error.middleware";
+
 app.use(cors({
   origin: "http://localhost:3000",
   credentials: true
@@ -29,5 +31,7 @@ app.get("/protected", authenticate, (req: AuthRequest, res) => {
 });
 
 app.use("/tasks", taskRoutes);
+
+app.use(globalErrorHandler);
 
 export default app;
